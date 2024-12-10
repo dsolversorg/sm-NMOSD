@@ -16,6 +16,7 @@ import Content from '../components/popUp/content';
 function Landing({ className }) {
   const dispatch = useDispatch();
   const [showPopup, setShowPopup] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
   const {
     connected,
     loading,
@@ -45,7 +46,6 @@ function Landing({ className }) {
   useEffect(() => {
     if (skip === true && connected === true) history.push('/video');
   }, [connected, skip]);
-
   return (
     <div className={className}>
       <div className="landing-wrapper">
@@ -66,15 +66,15 @@ function Landing({ className }) {
               <div className="row">
                 <div>
                   <h4 className="fw-light" style={{ marginBottom: '31px' }}>
-                    Sou uma especialista na
+                    Sou um especialista na
                     <b> NMOSD</b>
                     ,
                     faça-me uma pergunta e farei o meu melhor para respondê-la.
                   </h4>
                 </div>
               </div>
-              <div className="row" style={{ marginBottom: '60px' }}>
-                {!connected && (
+              <div className="row" style={{ marginBottom: isChecked ? '60px' : '0' }}>
+                {(!connected && isChecked) && (
                   <div
                     className="button-start button--disabled m-2 "
                     type="button"
@@ -82,13 +82,14 @@ function Landing({ className }) {
                     <span>
                       Aguarde...
                     </span>
-                    <img alt="gif loading" src="https://lh3.googleusercontent.com/proxy/9rLje0-3FNznCiW_PB26zLjadDVYYEDc6WyBUIcYBKXfbLZN8VMuPw_lBCo2FRl6ap4JPSUJGCqL8Q6FFb3oNEOY2JGJPKfGq_LdtfcP6nnp3dCWqZwQ27aW8_hbp3Zxcy9_rWFxryXb" className="gif-loading" />
+                    <img alt="gif loading" src="https://www.autopoint.com/wp-content/uploads/2022/07/autopoint-loading-svg.gif" className="gif-loading" />
                   </div>
                 )}
-                {connected && (
+                {(connected && isChecked) && (
                   <button
                     className={`${connected ? 'button-start' : 'button-start button-start--disabled'} m-2`}
                     type="button"
+                    id="button-start"
                     disabled={!connected}
                     onClick={redirectToVideoOnConnect}
                   >
@@ -97,7 +98,7 @@ function Landing({ className }) {
                 )}
               </div>
               <div className="checkbox-container">
-                <input type="checkbox" id="termsCheckbox" />
+                <input type="checkbox" checked={isChecked} onChange={(e) => setIsChecked(e.target.checked)} id="termsCheckbox" />
                 <p htmlFor="termsCheckbox">
                   <b>Aceitar os </b>
                   <button type="button" onClick={togglePopup}> Termos de Privacidade </button>
